@@ -7,6 +7,10 @@ class EntSchema:
         self._test = "abc"
 
     @staticmethod
+    def getName():
+        raise NotImpelementedError()
+
+    @staticmethod
     def getFields():
         return {}
 
@@ -34,7 +38,7 @@ class EntSchema:
                 return edge.schema.getEntFactory().gen(id)
             setattr(constructor, "gen" + name, func)
 
-        return constructor
+        return constructor(self.getName(), self.getFields())
 
 
 class EntSchemaField:
