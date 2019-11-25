@@ -13,6 +13,6 @@ py_test(
     python_version = "PY2",
     deps = [
         ":ent_loader",
-        "//entpy/storage:local_data_storage",
+        "//entpy/storage",
     ],
 )

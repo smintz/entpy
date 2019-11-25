@@ -4,5 +4,5 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
     name = "base",
-    srcs = ["ent_base.py"]
+    srcs = ["base.py"]
 )

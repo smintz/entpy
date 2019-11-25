@@ -13,3 +13,6 @@ class EntLoaderTest(unittest.TestCase):
 
         result = loader.gen(id)
         self.assertEqual(result, obj)
+
+if __name__ == '__main__':
+    unittest.main()

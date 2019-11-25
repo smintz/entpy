@@ -8,10 +8,10 @@ class EntLoader:
         self._timeout = None
 
     def gen(self, id):
-        if self._cached.get(id, False):
-            self._pending.push(id)
+        if not self._cached.get(id, False):
+            self._pending.append(id)
 
-        if not self._timeout:
+        if self._timeout is None:
             self._timeout = 3  # TODO: implement timeout
             self._load()
             self._timeout = None
@@ -26,6 +26,8 @@ class EntLoader:
         for id in pending:
             if result.get(id, False):
                 self._cached[id] = result[id]
+
+        return self._cached
 
 
     def clear(self, id):

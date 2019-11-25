@@ -3,15 +3,17 @@ package(default_visibility = ["//visibility:public"])
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
-    name = "storage",
-    srcs = ["local_data_storage.py"]
+    name = "schema",
+    srcs = ["ent_schema.py"]
 )
 
 py_test(
-    name = "storage_test",
-    srcs = ["storage_test.py"],
+    name = "schema_test",
+    srcs = ["schema_test.py"],
     python_version = "PY2",
     deps = [
-        ":storage",
+        ":schema",
+        "//entpy/base",
+        "//entpy/storage",
     ],
 )
