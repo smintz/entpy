@@ -2,8 +2,8 @@ import unittest
 from ent_loader import EntLoader
 from entpy.storage.local_data_storage import LocalDataStorage
 
-class EntLoaderTest(unittest.TestCase):
 
+class EntLoaderTest(unittest.TestCase):
     def test_run(self):
         storage = LocalDataStorage()
         loader = EntLoader(storage)
@@ -14,5 +14,6 @@ class EntLoaderTest(unittest.TestCase):
         result = loader.gen(id)
         self.assertEqual(result, obj)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

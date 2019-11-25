@@ -18,6 +18,7 @@ class EntMutationData:
     def getAvailableFields(self):
         return self._fields.keys()
 
+
 class EntMutationBuilder:
     def __init__(self, schema, operation, data):
         self._schema = schema
@@ -50,10 +51,11 @@ class EntMutationBuilder:
         if self._operation == UPDATE:
             write = storage.update(entity.getID(), rawData)
         if self._operation == DELETE:
-            write  = storage.delete(entity.getID())
+            write = storage.delete(entity.getID())
 
         factory = schema.getEntFactory()
         return factory(write)
+
 
 class EntMutationView:
     def __init__(self, data):

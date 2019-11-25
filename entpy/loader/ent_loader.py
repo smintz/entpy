@@ -1,6 +1,4 @@
-
 class EntLoader:
-
     def __init__(self, source):
         self._source = source
         self._cached = dict()
@@ -28,7 +26,6 @@ class EntLoader:
                 self._cached[id] = result[id]
 
         return self._cached
-
 
     def clear(self, id):
         self._cached.pop(id, None)

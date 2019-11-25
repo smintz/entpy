@@ -10,7 +10,7 @@ class LocalDataStorage:
         return result
 
     def create(self, data):
-        id = self._nextID + 1;
+        id = self._nextID + 1
         self._nextID = id
         self._data[id] = data
         return id

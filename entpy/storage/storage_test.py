@@ -1,8 +1,8 @@
 import unittest
 from local_data_storage import LocalDataStorage
 
-class LocalDataStorageTest(unittest.TestCase):
 
+class LocalDataStorageTest(unittest.TestCase):
     def test_create(self):
         storage = LocalDataStorage()
 
@@ -18,7 +18,8 @@ class LocalDataStorageTest(unittest.TestCase):
 
         storage.delete(id)
         result = storage.select([id])
-        self.assertEqual(result.get(id, None), None )
+        self.assertEqual(result.get(id, None), None)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

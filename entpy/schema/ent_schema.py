@@ -2,6 +2,7 @@ from entpy.base.base import EntBase
 from entpy.storage.local_data_storage import LocalDataStorage
 from mutator import EntMutationData, EntMutationView, EntMutationBuilder
 
+
 class EntSchema:
     def __init__(self):
         # TODO: implement checkers
@@ -26,17 +27,22 @@ class EntSchema:
     def getEntClass(self):
         class constructor(EntBase):
             pass
+
         fields = self.getFields()
         for name, field in fields.iteritems():
+
             def func(self):
                 return field.coerce(self.getField(name))
+
             setattr(constructor, "get" + name, func)
 
         edges = self.getEdges()
         for name, edge in edges.iteritems():
+
             def func(s):
                 id = self.getField(edge.field)
                 return edge.schema.getEntFactory().gen(id)
+
             setattr(constructor, "gen" + name, func)
 
         return constructor
@@ -57,6 +63,7 @@ class EntSchema:
                     field = fields[name]
                     rawData[name] = items[key][field.storage_key]
                 entities[key] = Ent(key, rawData)
+
         return func
 
     def getMutationBuilderClass(self):
@@ -80,21 +87,22 @@ class EntSchema:
 
         fields = self.getFields()
         for name in fields.keys():
+
             def func(self):
                 return self.getOldField(name)
+
             setattr(constructor, "getOld" + name, func)
 
             def func(self):
                 return self.getNewField(name)
+
             setattr(constructor, "getNew" + name, func)
 
             def func(self):
                 return self.getNewOrOldField(name)
+
             setattr(constructor, "getNewOrOld" + name, func)
         return constructor
-
-
-
 
 
 class EntSchemaField:
@@ -109,8 +117,8 @@ class EntSchemaField:
     def assertx(value):
         raise NotImpelementedError()
 
-class StringSchemaField(EntSchemaField):
 
+class StringSchemaField(EntSchemaField):
     @staticmethod
     def coerce(value):
         # TODO: cast as string
@@ -119,9 +127,9 @@ class StringSchemaField(EntSchemaField):
     def assertx(value):
         # TODO: validate string
         return value
+
 
 class NumberSchemaField(EntSchemaField):
-
     @staticmethod
     def coerce(value):
         # TODO: cast as string
@@ -130,6 +138,7 @@ class NumberSchemaField(EntSchemaField):
     def assertx(value):
         # TODO: validate string
         return value
+
 
 class EntSchemaEdge:
     def __init__(self, field, schema):
