@@ -1,0 +1,18 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+py_library(
+    name = "ent_loader",
+    srcs = ["ent_loader.py"]
+)
+
+py_test(
+    name = "ent_loader_test",
+    srcs = ["ent_loader_test.py"],
+    python_version = "PY2",
+    deps = [
+        ":ent_loader",
+        "//entpy/storage:local_data_storage",
+    ],
+)

@@ -1,0 +1,17 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+py_library(
+    name = "local_data_storage",
+    srcs = ["local_data_storage.py"]
+)
+
+py_test(
+    name = "local_data_storage_test",
+    srcs = ["local_data_storage_test.py"],
+    python_version = "PY2",
+    deps = [
+        ":local_data_storage",
+    ],
+)
