@@ -4,7 +4,10 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
     name = "schema",
-    srcs = ["ent_schema.py"]
+    srcs = [
+        "ent_schema.py",
+        "mutator.py"
+    ]
 )
 
 py_test(
