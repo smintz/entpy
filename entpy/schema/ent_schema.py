@@ -48,10 +48,12 @@ class EntSchema:
         for name in fields.keys():
             field = fields[name]
 
-            def func(self):
-                return field.coerce(self.getField(name))
+            def _func(_name):
+                def func(self):
+                    return field.coerce(self.getField(_name))
+                return func
 
-            setattr(EntConstructor, "get" + name, func)
+            setattr(EntConstructor, "get" + name, _func(name))
 
         edges = self.getEdges()
         for name in edges.keys():
@@ -89,13 +91,14 @@ class EntSchema:
         for name in fields.keys():
             field = fields[name]
 
-            def func(self, value):
-                self.setField(name, field.assertx(value))
-                return self
+            def _func(_name):
+                def func(self, value):
+                    self.setField(_name, field.assertx(value))
+                    return self
+                return func
 
-            setattr(EntBuilderConstructor, "set" + name, func)
+            setattr(EntBuilderConstructor, "set" + name, _func(name))
 
-        print("EntBuilderConstructor", EntBuilderConstructor.__dict__)
         return EntBuilderConstructor
 
     def getMutationViewClass(self):

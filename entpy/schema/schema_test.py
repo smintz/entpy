@@ -21,23 +21,24 @@ class EntSchemaTest(unittest.TestCase):
         location_schema = EntLocationSchema()
         EntLocation = location_schema.getEntClass()
         EntLocationMutator = location_schema.getMutator()
+        EntLocationFactory = location_schema.getEntFactory()
 
         tlv = EntLocationMutator.create()
-        print("EntLocationMutator", EntLocationMutator.__dict__)
-        print("tlv", tlv.__dict__)
-        print("tlv.setCity   ", tlv.setCity)
-        print("tlv.setCountry", tlv.setCountry)
         tlv.setCity("Tel Aviv")
         tlv.setCountry("Israel")  # .save()
         result = tlv.save()
-        print(result.__dict__)
-
-        u = EntLocationMutator.update(result)
-        u.setCity("Tel Aviv")
-        result = u.save()
 
         self.assertEqual(result.getCountry(), "Israel")
         self.assertEqual(result.getCity(), "Tel Aviv")
+
+        u = EntLocationMutator.update(result)
+
+        u.setCity("Holon")
+        result = u.save()
+        self.assertEqual(result.getCity(), "Holon")
+
+        read = EntLocationFactory.gen(1)
+        self.assertEqual(read.getCity(), "Holon")
 
 
 if __name__ == "__main__":

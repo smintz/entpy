@@ -31,7 +31,6 @@ class EntMutationBuilder:
         self._data = data
 
     def setField(self, name, value):
-        print("EntMutationBuilder.setField", name, value)
         self._data.setField(name, value)
         return self
 
