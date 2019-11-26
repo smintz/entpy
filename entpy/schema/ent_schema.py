@@ -59,11 +59,13 @@ class EntSchema:
         for name in edges.keys():
             edge = edges[name]
 
-            def func(s):
-                id = self.getField(edge.field)
-                return edge.schema.getEntFactory().gen(id)
+            def _func(_name):
+                def func(self):
+                    id = self.getField(edge.field)
+                    return edge.schema.getEntFactory().gen(id)
+                return func
 
-            setattr(EntConstructor, "gen" + name, func)
+            setattr(EntConstructor, "gen" + name, _func(name))
 
         return EntConstructor
 
