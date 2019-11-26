@@ -7,16 +7,19 @@ py_library(
     srcs = [
         "ent_schema.py",
         "mutator.py"
-    ]
+    ],
+    deps = [
+        "//entpy/base",
+        "//entpy/storage",
+        "//entpy/loader",
+    ],
 )
 
 py_test(
     name = "schema_test",
     srcs = ["schema_test.py"],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":schema",
-        "//entpy/base",
-        "//entpy/storage",
     ],
 )

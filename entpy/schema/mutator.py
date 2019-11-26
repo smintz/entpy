@@ -1,3 +1,8 @@
+CREATE = 0
+UPDATE = 1
+DELETE = 2
+
+
 class EntMutationData:
     def __init__(self, entity):
         self._entity = entity
@@ -10,7 +15,7 @@ class EntMutationData:
         self._fields[name] = value
 
     def hasField(self, name):
-        return hasattr(self, name)
+        return name in self._fields.keys()
 
     def getField(self, name):
         return self._fields[name]
@@ -26,6 +31,7 @@ class EntMutationBuilder:
         self._data = data
 
     def setField(self, name, value):
+        print("EntMutationBuilder.setField", name, value)
         self._data.setField(name, value)
         return self
 
@@ -36,7 +42,7 @@ class EntMutationBuilder:
 
         # TODO: triggers, validators and observers
 
-        fields = scema.getFields()
+        fields = schema.getFields()
         rawData = dict()
 
         for name in fields.keys():
@@ -54,7 +60,8 @@ class EntMutationBuilder:
             write = storage.delete(entity.getID())
 
         factory = schema.getEntFactory()
-        return factory(write)
+        result = factory.gen(write)
+        return result
 
 
 class EntMutationView:
@@ -65,7 +72,8 @@ class EntMutationView:
         return self._data.getEntity().getID()
 
     def getOldField(self, name):
-        return getattr(self._data.getEntity(), "get" + name)()
+        # return getattr(self._data.getEntity(), "get" + name)()
+        return self._data.getEntity().getField(name)
 
     def getNewField(self, name):
         if self._data.hasField(name):
@@ -73,6 +81,7 @@ class EntMutationView:
         return None
 
     def getNewOrOldField(self, name):
-        if self._data.hasField(name):
-            return this._data.getField(name)
-        return this.getOldField(name)
+        new = self.getNewField(name)
+        if new != None:
+            return new
+        return self.getOldField(name)

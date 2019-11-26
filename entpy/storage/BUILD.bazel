@@ -10,7 +10,7 @@ py_library(
 py_test(
     name = "storage_test",
     srcs = ["storage_test.py"],
-    python_version = "PY2",
+    python_version = "PY3",
     deps = [
         ":storage",
     ],

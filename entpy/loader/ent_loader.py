@@ -1,9 +1,10 @@
 class EntLoader:
-    def __init__(self, source):
+    def __init__(self, source, resolver=None):
         self._source = source
         self._cached = dict()
         self._pending = list()
         self._timeout = None
+        self._resolver = resolver
 
     def gen(self, id):
         if not self._cached.get(id, False):
@@ -23,7 +24,7 @@ class EntLoader:
         result = self._source.select(pending)
         for id in pending:
             if result.get(id, False):
-                self._cached[id] = result[id]
+                self._cached[id] = self._resolver(id, result[id])
 
         return self._cached
 

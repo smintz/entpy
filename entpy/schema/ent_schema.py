@@ -1,12 +1,21 @@
 from entpy.base.base import EntBase
+from entpy.loader.ent_loader import EntLoader
 from entpy.storage.local_data_storage import LocalDataStorage
-from mutator import EntMutationData, EntMutationView, EntMutationBuilder
+from mutator import (
+    EntMutationData,
+    EntMutationView,
+    EntMutationBuilder,
+    CREATE,
+    UPDATE,
+    DELETE,
+)
 
 
 class EntSchema:
     def __init__(self):
         # TODO: implement checkers
         self._test = "abc"
+        self._storage = self.getStorage()
 
     @staticmethod
     def getName():
@@ -21,53 +30,59 @@ class EntSchema:
         return {}
 
     @staticmethod
-    def getStorage():
+    def setStorage():
         return LocalDataStorage()
 
+    def getStorage(self):
+        if hasattr(self, "_storage"):
+            return self._storage
+        else:
+            self._storage = self.setStorage()
+        return self._storage
+
     def getEntClass(self):
-        class constructor(EntBase):
+        class EntConstructor(EntBase):
             pass
 
         fields = self.getFields()
-        for name, field in fields.iteritems():
+        for name in fields.keys():
+            field = fields[name]
 
             def func(self):
                 return field.coerce(self.getField(name))
 
-            setattr(constructor, "get" + name, func)
+            setattr(EntConstructor, "get" + name, func)
 
         edges = self.getEdges()
-        for name, edge in edges.iteritems():
+        for name in edges.keys():
+            edge = edges[name]
 
             def func(s):
                 id = self.getField(edge.field)
                 return edge.schema.getEntFactory().gen(id)
 
-            setattr(constructor, "gen" + name, func)
+            setattr(EntConstructor, "gen" + name, func)
 
-        return constructor
+        return EntConstructor
 
     def getEntFactory(self):
         storage = self.getStorage()
         Ent = self.getEntClass()
         fields = self.getFields()
 
-        def func(ids):
-            items = storage.select(ids)
-            entities = dict()
-            for key in items:
-                if not items[key]:
-                    continue
-                rawData = dict()
-                for name in fields:
-                    field = fields[name]
-                    rawData[name] = items[key][field.storage_key]
-                entities[key] = Ent(key, rawData)
+        def func(key, item):
+            rawData = dict()
+            for name in fields:
+                field = fields[name]
+                rawData[name] = item[field.storage_key]
+            return Ent(key, rawData)
 
-        return func
+        loader = EntLoader(storage, func)
+
+        return loader
 
     def getMutationBuilderClass(self):
-        class constructor(EntMutationBuilder):
+        class EntBuilderConstructor(EntMutationBuilder):
             pass
 
         fields = self.getFields()
@@ -75,14 +90,16 @@ class EntSchema:
             field = fields[name]
 
             def func(self, value):
-                return self.setField(name, field.assertx(value))
+                self.setField(name, field.assertx(value))
+                return self
 
-            setattr(constructor, "set" + name, func)
+            setattr(EntBuilderConstructor, "set" + name, func)
 
-        return constructor
+        print("EntBuilderConstructor", EntBuilderConstructor.__dict__)
+        return EntBuilderConstructor
 
     def getMutationViewClass(self):
-        class constructor(EntMutationView):
+        class EntViewConstructor(EntMutationView):
             pass
 
         fields = self.getFields()
@@ -91,18 +108,43 @@ class EntSchema:
             def func(self):
                 return self.getOldField(name)
 
-            setattr(constructor, "getOld" + name, func)
+            setattr(EntViewConstructor, "getOld" + name, func)
 
             def func(self):
                 return self.getNewField(name)
 
-            setattr(constructor, "getNew" + name, func)
+            setattr(EntViewConstructor, "getNew" + name, func)
 
             def func(self):
                 return self.getNewOrOldField(name)
 
-            setattr(constructor, "getNewOrOld" + name, func)
-        return constructor
+            setattr(EntViewConstructor, "getNewOrOld" + name, func)
+        return EntViewConstructor
+
+    def getMutator(self):
+        schema = self
+        Ent = schema.getEntClass()
+        Builder = schema.getMutationBuilderClass()
+
+        class mutator:
+            @staticmethod
+            def create():
+                _data = dict()
+                for field in schema.getFields().keys():
+                    _data[field] = None
+                data = EntMutationData(Ent(0, _data))
+                return Builder(schema, CREATE, data)
+
+            @staticmethod
+            def update(entity):
+                data = EntMutationData(entity)
+                return Builder(schema, UPDATE, data)
+
+            def delete(entity):
+                data = EntMutationData(entity)
+                return Builder(schema, DELETE, data)
+
+        return mutator
 
 
 class EntSchemaField:
@@ -124,6 +166,7 @@ class StringSchemaField(EntSchemaField):
         # TODO: cast as string
         return value
 
+    @staticmethod
     def assertx(value):
         # TODO: validate string
         return value
@@ -135,6 +178,7 @@ class NumberSchemaField(EntSchemaField):
         # TODO: cast as string
         return value
 
+    @staticmethod
     def assertx(value):
         # TODO: validate string
         return value
