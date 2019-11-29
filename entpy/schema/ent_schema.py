@@ -1,7 +1,7 @@
 from entpy.base.base import EntBase
 from entpy.loader.ent_loader import EntLoader
 from entpy.storage.local_data_storage import LocalDataStorage
-from mutator import (
+from entpy.schema.mutator import (
     EntMutationData,
     EntMutationView,
     EntMutationBuilder,
@@ -48,12 +48,13 @@ class EntSchema:
         for name in fields.keys():
             field = fields[name]
 
-            def _func(_name):
+            def _func(_name, _field):
                 def func(self):
-                    return field.coerce(self.getField(_name))
+                    return _field.coerce(self.getField(_name))
+
                 return func
 
-            setattr(EntConstructor, "get" + name, _func(name))
+            setattr(EntConstructor, "get" + name, _func(name, field))
 
         edges = self.getEdges()
         for name in edges.keys():
@@ -61,8 +62,10 @@ class EntSchema:
 
             def _func(_name):
                 def func(self):
-                    id = self.getField(edge.field)
+                    field = fields[edge.field]
+                    id = field.coerce(self.getField(edge.field))
                     return edge.schema.getEntFactory().gen(id)
+
                 return func
 
             setattr(EntConstructor, "gen" + name, _func(name))
@@ -97,6 +100,7 @@ class EntSchema:
                 def func(self, value):
                     self.setField(_name, field.assertx(value))
                     return self
+
                 return func
 
             setattr(EntBuilderConstructor, "set" + name, _func(name))
@@ -168,8 +172,7 @@ class EntSchemaField:
 class StringSchemaField(EntSchemaField):
     @staticmethod
     def coerce(value):
-        # TODO: cast as string
-        return value
+        return str(value)
 
     @staticmethod
     def assertx(value):
@@ -180,8 +183,7 @@ class StringSchemaField(EntSchemaField):
 class NumberSchemaField(EntSchemaField):
     @staticmethod
     def coerce(value):
-        # TODO: cast as string
-        return value
+        return int(value)
 
     @staticmethod
     def assertx(value):
