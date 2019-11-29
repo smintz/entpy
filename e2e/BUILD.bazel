@@ -1,0 +1,18 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+py_library(
+    name = "e2e",
+    srcs = ["e2e.py"]
+)
+py_test(
+    name = "sqlite_test",
+    srcs = ["sqlite_test.py"],
+    python_version = "PY3",
+    deps = [
+        ":e2e",
+        "//entpy/storage",
+        "//entpy/storage/sql",
+        "//entpy/schema",
+    ],
+)
