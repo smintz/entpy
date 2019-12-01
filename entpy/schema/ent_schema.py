@@ -19,7 +19,7 @@ class EntSchema:
 
     @staticmethod
     def getName():
-        raise NotImpelementedError()
+        raise NotImplementedError()
 
     @staticmethod
     def getFields():
@@ -50,7 +50,7 @@ class EntSchema:
 
             def _func(_name, _field):
                 def func(self):
-                    return _field.coerce(self.getField(_name))
+                    return _field.coerce_(self.getField(_name))
 
                 return func
 
@@ -63,7 +63,7 @@ class EntSchema:
             def _func(_name):
                 def func(self):
                     field = fields[edge.field]
-                    id = field.coerce(self.getField(edge.field))
+                    id = field.coerce_(self.getField(edge.field))
                     return edge.schema.getEntFactory().gen(id)
 
                 return func
@@ -98,7 +98,7 @@ class EntSchema:
 
             def _func(_name):
                 def func(self, value):
-                    self.setField(_name, field.assertx(value))
+                    self.setField(_name, field.assert_(value))
                     return self
 
                 return func
@@ -149,6 +149,7 @@ class EntSchema:
                 data = EntMutationData(entity)
                 return Builder(schema, UPDATE, data)
 
+            @staticmethod
             def delete(entity):
                 data = EntMutationData(entity)
                 return Builder(schema, DELETE, data)
@@ -161,32 +162,32 @@ class EntSchemaField:
         self.storage_key = key
 
     @staticmethod
-    def coerce(value):
-        raise NotImpelementedError()
+    def coerce_(value):
+        raise NotImplementedError()
 
     @staticmethod
-    def assertx(value):
-        raise NotImpelementedError()
+    def assert_(value):
+        raise NotImplementedError()
 
 
 class StringSchemaField(EntSchemaField):
     @staticmethod
-    def coerce(value):
+    def coerce_(value):
         return str(value)
 
     @staticmethod
-    def assertx(value):
+    def assert_(value):
         # TODO: validate string
         return value
 
 
 class NumberSchemaField(EntSchemaField):
     @staticmethod
-    def coerce(value):
+    def coerce_(value):
         return int(value)
 
     @staticmethod
-    def assertx(value):
+    def assert_(value):
         # TODO: validate string
         return value
 
