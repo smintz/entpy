@@ -14,7 +14,6 @@ class SQLStorage:
     @staticmethod
     def getRecordIDDefinition():
         return "INTEGER PRIMARY KEY AUTOINCREMENT"
-        raise NotImplementedError()
 
     @staticmethod
     def stringFieldDef():

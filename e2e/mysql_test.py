@@ -21,7 +21,7 @@ from entpy.storage.sql.sql_storage import MySQLStorage
 
 MYSTRING = randomString()
 conn = mysql.connector.connect(
-    host="127.0.0.1", user="root", passwd="my-secret-pw", database="entpy"
+    host="mysql", user="root", passwd="my-secret-pw", database="entpy"
 )
 
 
