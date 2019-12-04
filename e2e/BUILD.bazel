@@ -9,6 +9,7 @@ py_library(
     srcs = ["e2e.py"],
     deps = [
         requirement("mysql-connector-python"),
+        requirement("psycopg2-binary"),
         "//entpy/storage",
         "//entpy/storage/sql",
         "//entpy/schema",
@@ -26,6 +27,14 @@ py_test(
     name = "mysql_test",
     srcs = ["mysql_test.py"],
     python_version = "PY3",
+    deps = [
+        ":e2e",
+    ],
+)
+py_test(
+    name = "postgresql_test",
+    srcs = ["postgresql_test.py"],
+    python_version = "PY2",
     deps = [
         ":e2e",
     ],

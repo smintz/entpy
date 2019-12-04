@@ -1,5 +1,6 @@
 from entpy.schema.ent_schema import NumberSchemaField, StringSchemaField
 
+
 class SQLStorage:
     def __init__(self, conn, ent_class):
         self.conn = conn
@@ -17,7 +18,7 @@ class SQLStorage:
 
     @staticmethod
     def stringFieldDef():
-        return "VARCHAR(255)"
+        return "VARCHAR"
 
     @staticmethod
     def numberFieldDef():
@@ -49,6 +50,7 @@ CREATE TABLE IF NOT EXISTS {table}  ({keys})
         )
 
         self.c.execute(query)
+        self.conn.commit()
 
     def getTableName(self):
         return self.ent.getName()
@@ -68,6 +70,7 @@ CREATE TABLE IF NOT EXISTS {table}  ({keys})
             self.getRecordIDName(),
             placeholders,
         )
+        print(query, keys)
         self.c.execute(query, keys)
         r = self.c.fetchall()
 
@@ -83,17 +86,28 @@ CREATE TABLE IF NOT EXISTS {table}  ({keys})
 
         return result
 
+    @staticmethod
+    def createQuery():
+        return "INSERT INTO {table} ({keys}) VALUES ({values})"
+
+    def lastrowid(self):
+        return self.c.lastrowid
+
     def create(self, data):
         print("create", self.getTableName(), data)
 
         placeholders = ", ".join([self.placeholder()] * len(data.values()))
-        query = "INSERT INTO {table} ({keys}) VALUES ({values})".format(
-            table=self.getTableName(), keys=", ".join(data.keys()), values=placeholders
+        query = self.createQuery().format(
+            table=self.getTableName(),
+            keys=", ".join(data.keys()),
+            values=placeholders,
+            record_id=self.getRecordIDName(),
         )
         print(query)
         self.c.execute(query, list(data.values()))
+        lastrowid = self.lastrowid()
         self.conn.commit()
-        return self.c.lastrowid
+        return lastrowid
 
     def update(self, key, data):
         print("update", self.getTableName(), key, data)
@@ -135,3 +149,22 @@ class MySQLStorage(SQLStorage):
     @staticmethod
     def placeholder():
         return "%s"
+
+    @staticmethod
+    def stringFieldDef():
+        return "TEXT"
+
+class PostgreSQLStorage(SQLStorage):
+    def getRecordIDDefinition(self):
+        return "SERIAL PRIMARY KEY"
+
+    @staticmethod
+    def placeholder():
+        return "%s"
+
+    @staticmethod
+    def createQuery():
+        return "INSERT INTO {table} ({keys}) VALUES ({values}) RETURNING {record_id}"
+
+    def lastrowid(self):
+        return self.c.fetchone()[0]
