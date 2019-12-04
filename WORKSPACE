@@ -15,3 +15,17 @@ load("@bazel_federation//:repositories.bzl", "rules_python_deps")
 rules_python_deps()
 load("@bazel_federation//setup:rules_python.bzl",  "rules_python_setup")
 rules_python_setup(use_pip=True)
+
+load("@rules_python//python:pip.bzl", "pip_import")
+
+# Create a central repo that knows about the dependencies needed for
+# requirements.txt.
+pip_import(   # or pip3_import
+   name = "my_deps",
+   requirements = "//:requirements.txt",
+)
+
+# Load the central repo's install function from its `//:requirements.bzl` file,
+# and call it.
+load("@my_deps//:requirements.bzl", "pip_install")
+pip_install()

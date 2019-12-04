@@ -1,0 +1,27 @@
+on: push
+name: End to End Tests
+jobs:
+  mysql_test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: "my-secret-pw"
+          MYSQL_DATABASE: "entpy"
+        ports:
+        - 3306
+    steps:
+    - uses: actions/checkout@master
+    - name: run
+      uses: ngalaiko/bazel-action/1.2.1@master
+      with:
+        args: test //e2e:mysql_test
+  sqlite_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: run
+      uses: ngalaiko/bazel-action/1.2.1@master
+      with:
+        args: test //e2e:sqlite_test

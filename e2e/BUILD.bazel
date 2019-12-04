@@ -1,9 +1,18 @@
 package(default_visibility = ["//visibility:public"])
+load("@my_deps//:requirements.bzl", "requirement")
+
+
 
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
 py_library(
     name = "e2e",
-    srcs = ["e2e.py"]
+    srcs = ["e2e.py"],
+    deps = [
+        requirement("mysql-connector-python"),
+        "//entpy/storage",
+        "//entpy/storage/sql",
+        "//entpy/schema",
+    ],
 )
 py_test(
     name = "sqlite_test",
@@ -11,8 +20,13 @@ py_test(
     python_version = "PY3",
     deps = [
         ":e2e",
-        "//entpy/storage",
-        "//entpy/storage/sql",
-        "//entpy/schema",
+    ],
+)
+py_test(
+    name = "mysql_test",
+    srcs = ["mysql_test.py"],
+    python_version = "PY3",
+    deps = [
+        ":e2e",
     ],
 )
