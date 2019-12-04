@@ -1,18 +1,30 @@
 import unittest
-import sqlite3
+import mysql.connector
 import random
 import string
+
 
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(stringLength))
+    return "".join(random.choice(letters) for i in range(stringLength))
 
-from entpy.schema.ent_schema import EntSchema, StringSchemaField, NumberSchemaField, EntSchemaEdge
-from entpy.storage.sql.sql_storage import SQLStorage
+
+from entpy.schema.ent_schema import (
+    EntSchema,
+    StringSchemaField,
+    NumberSchemaField,
+    EntSchemaEdge,
+)
+from entpy.storage.sql.sql_storage import MySQLStorage
+
 
 MYSTRING = randomString()
-conn = sqlite3.connect("/tmp/test.sqlite")
+conn = mysql.connector.connect(
+    host="127.0.0.1", user="root", passwd="my-secret-pw", database="entpy"
+)
+
+
 class EntLocationSchema(EntSchema):
     @staticmethod
     def getName():
@@ -26,7 +38,7 @@ class EntLocationSchema(EntSchema):
         }
 
     def setStorage(self):
-        return SQLStorage(conn, self)
+        return MySQLStorage(conn, self)
 
 
 LocationSchema = EntLocationSchema()
@@ -53,7 +65,7 @@ class EntPersonSchema(EntSchema):
         return {"Location": EntSchemaEdge("LocationID", LocationSchema)}
 
     def setStorage(self):
-        return SQLStorage(conn, self)
+        return MySQLStorage(conn, self)
 
 
 PersonSchema = EntPersonSchema()

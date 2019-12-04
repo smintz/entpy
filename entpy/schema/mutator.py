@@ -59,6 +59,7 @@ class EntMutationBuilder:
             write = storage.delete(entity.getID())
 
         factory = schema.getEntFactory()
+        factory.clear(write)
         result = factory.gen(write)
         return result
 
