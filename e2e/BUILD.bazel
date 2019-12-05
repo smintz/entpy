@@ -1,5 +1,5 @@
 package(default_visibility = ["//visibility:public"])
-load("@my_deps//:requirements.bzl", "requirement")
+load("@pip//:requirements.bzl", "requirement")
 
 
 
@@ -8,8 +8,6 @@ py_library(
     name = "e2e",
     srcs = ["e2e.py"],
     deps = [
-        requirement("mysql-connector-python"),
-        requirement("psycopg2-binary"),
         "//entpy/storage",
         "//entpy/storage/sql",
         "//entpy/schema",
@@ -29,6 +27,7 @@ py_test(
     python_version = "PY3",
     deps = [
         ":e2e",
+        requirement("mysql-connector-python"),
     ],
 )
 py_test(
@@ -37,5 +36,6 @@ py_test(
     python_version = "PY2",
     deps = [
         ":e2e",
+        requirement("psycopg2-binary"),
     ],
 )
