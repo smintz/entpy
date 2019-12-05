@@ -97,7 +97,7 @@ class IntegrationTestFactory(unittest.TestCase):
         result = u.save()
         self.assertEqual(result.getCity(), "Holon")
 
-        read = EntLocationFactory.gen(1)
+        read = EntLocationFactory.gen(result.getID())
         self.assertEqual(read.getCity(), "Holon")
 
         smintz = (
@@ -114,6 +114,6 @@ class IntegrationTestFactory(unittest.TestCase):
             .setLocationID(result.getID())
             .save()
         )
-        self.assertEqual(lior.getID(), 2)
+        self.assertEqual(lior.getAge(), 30)
         self.assertEqual(smintz.getName(), "Shahar")
         self.assertEqual(smintz.genLocation().getCountry(), result.getCountry())

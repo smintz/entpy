@@ -63,7 +63,8 @@ class EntSchema:
             def _func(_name):
                 def func(self):
                     field = fields[edge.field]
-                    id = field.coerce_(self.getField(edge.field))
+                    id = self.getField(edge.field)
+                    print("factory_id", id)
                     return edge.schema.getEntFactory().gen(id)
 
                 return func

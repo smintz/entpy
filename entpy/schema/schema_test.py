@@ -1,6 +1,11 @@
 import unittest
 
-from entpy.schema.schema import EntSchema, StringSchemaField, NumberSchemaField, EntSchemaEdge
+from entpy.schema.schema import (
+    EntSchema,
+    StringSchemaField,
+    NumberSchemaField,
+    EntSchemaEdge,
+)
 
 
 class EntLocationSchema(EntSchema):

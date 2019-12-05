@@ -17,7 +17,7 @@ class RedisStorage:
         for elem in r:
             id = ids[i]
             result[id] = convert(elem)
-            id = id + 1
+            i = i + 1
 
         print(r)
         print(result)
