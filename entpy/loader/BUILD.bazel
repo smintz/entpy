@@ -4,12 +4,12 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
     name = "loader",
-    srcs = ["ent_loader.py"]
+    srcs = ["loader.py"]
 )
 
 py_test(
-    name = "ent_loader_test",
-    srcs = ["ent_loader_test.py"],
+    name = "loader_test",
+    srcs = ["loader_test.py"],
     python_version = "PY3",
     deps = [
         ":loader",

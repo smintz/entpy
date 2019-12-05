@@ -1,6 +1,6 @@
 import unittest
-from ent_loader import EntLoader
-from entpy.storage.local_data_storage import LocalDataStorage
+from entpy.loader.loader import EntLoader
+from entpy.storage.storage import LocalDataStorage
 
 
 class EntLoaderTest(unittest.TestCase):

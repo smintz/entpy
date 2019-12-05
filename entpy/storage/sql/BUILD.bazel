@@ -4,7 +4,7 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
     name = "sql",
-    srcs = ["sql_storage.py"]
+    srcs = ["sql.py"]
 )
 
 py_test(

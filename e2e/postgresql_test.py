@@ -1,6 +1,6 @@
 import psycopg2
 import unittest
-from entpy.storage.sql.sql_storage import PostgreSQLStorage
+from entpy.storage.sql.sql import PostgreSQLStorage
 from e2e import IntegrationTestFactory
 import socket
 

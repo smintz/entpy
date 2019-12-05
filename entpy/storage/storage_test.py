@@ -1,5 +1,5 @@
 import unittest
-from local_data_storage import LocalDataStorage
+from entpy.storage.storage import LocalDataStorage
 
 
 class LocalDataStorageTest(unittest.TestCase):
