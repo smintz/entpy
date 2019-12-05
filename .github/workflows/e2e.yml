@@ -17,6 +17,22 @@ jobs:
       uses: ngalaiko/bazel-action/1.2.1@master
       with:
         args: test //e2e:mysql_test
+  postgresql_test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: "my-secret-pw"
+          POSTGRES_DB: "entpy"
+        ports:
+        - 5432
+    steps:
+    - uses: actions/checkout@master
+    - name: run
+      uses: ngalaiko/bazel-action/1.2.1@master
+      with:
+        args: test //e2e:postgresql_test
   sqlite_test:
     runs-on: ubuntu-latest
     steps:
