@@ -154,6 +154,7 @@ class MySQLStorage(SQLStorage):
     def stringFieldDef():
         return "TEXT"
 
+
 class PostgreSQLStorage(SQLStorage):
     def getRecordIDDefinition(self):
         return "SERIAL PRIMARY KEY"

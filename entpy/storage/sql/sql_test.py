@@ -9,12 +9,10 @@ class EntTestSchema(EntSchema):
     def getName():
         return "test"
 
-
     @staticmethod
     def getFields():
-        return {
-            "Name": StringSchemaField('name')
-        }
+        return {"Name": StringSchemaField("name")}
+
 
 EntTest = EntTestSchema()
 
@@ -24,15 +22,15 @@ class SQLStorageTest(unittest.TestCase):
         conn = sqlite3.connect(":memory:")
         storage = SQLStorage(conn, EntTest)
 
-        id = storage.create({'name': 'Shahar'})
+        id = storage.create({"name": "Shahar"})
         self.assertEqual(id, 1)
 
         result = storage.select([1])
-        self.assertEqual(result[id]['name'], "Shahar")
+        self.assertEqual(result[id]["name"], "Shahar")
 
-        id = storage.update(id, {'name': 'Lior'})
+        id = storage.update(id, {"name": "Lior"})
         result = storage.select([id])
-        self.assertEqual(result[id]['name'], "Lior")
+        self.assertEqual(result[id]["name"], "Lior")
 
         storage.delete(id)
         result = storage.select([id])
