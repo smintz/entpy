@@ -1,0 +1,12 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@pip//:requirements.bzl", "requirement")
+
+py_library(
+    name = "mongo",
+    srcs = ["mongo.py"],
+    deps = [
+        requirement("pymongo")
+    ]
+)

@@ -46,6 +46,19 @@ jobs:
       uses: ngalaiko/bazel-action/1.2.1@master
       with:
         args: test //e2e:redis_test
+  mongo_test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+        - 6379
+    steps:
+    - uses: actions/checkout@master
+    - name: run
+      uses: ngalaiko/bazel-action/1.2.1@master
+      with:
+        args: test //e2e:mongo_test
   sqlite_test:
     runs-on: ubuntu-latest
     steps:
