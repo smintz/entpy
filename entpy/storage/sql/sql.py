@@ -1,4 +1,4 @@
-from entpy.schema.ent_schema import NumberSchemaField, StringSchemaField
+from entpy.schema.schema import NumberSchemaField, StringSchemaField
 
 
 class SQLStorage:

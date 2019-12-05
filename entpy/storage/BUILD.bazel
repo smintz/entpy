@@ -4,7 +4,7 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
 py_library(
     name = "storage",
-    srcs = ["local_data_storage.py"]
+    srcs = ["storage.py"]
 )
 
 py_test(
@@ -12,6 +12,6 @@ py_test(
     srcs = ["storage_test.py"],
     python_version = "PY3",
     deps = [
-        ":storage",
+        "//entpy/storage",
     ],
 )

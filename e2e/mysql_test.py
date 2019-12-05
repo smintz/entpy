@@ -1,6 +1,6 @@
 import mysql.connector
 import unittest
-from entpy.storage.sql.sql_storage import MySQLStorage
+from entpy.storage.sql.sql import MySQLStorage
 from e2e import IntegrationTestFactory
 import socket
 

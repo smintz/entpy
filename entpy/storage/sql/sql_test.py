@@ -1,7 +1,7 @@
 import unittest
 import sqlite3
-from sql_storage import SQLStorage
-from entpy.schema.ent_schema import EntSchema, StringSchemaField
+from entpy.storage.sql.sql import SQLStorage
+from entpy.schema.schema import EntSchema, StringSchemaField
 
 
 class EntTestSchema(EntSchema):

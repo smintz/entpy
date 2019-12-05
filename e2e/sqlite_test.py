@@ -1,6 +1,6 @@
 import sqlite3
 import unittest
-from entpy.storage.sql.sql_storage import SQLStorage
+from entpy.storage.sql.sql import SQLStorage
 from e2e import IntegrationTestFactory
 
 conn = sqlite3.connect(":memory:")

@@ -1,6 +1,6 @@
 from entpy.base.base import EntBase
-from entpy.loader.ent_loader import EntLoader
-from entpy.storage.local_data_storage import LocalDataStorage
+from entpy.loader.loader import EntLoader
+from entpy.storage.storage import LocalDataStorage
 from entpy.schema.mutator import (
     EntMutationData,
     EntMutationView,

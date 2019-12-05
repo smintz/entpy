@@ -1,5 +1,5 @@
 import unittest
-from entpy.schema.ent_schema import (
+from entpy.schema.schema import (
     EntSchema,
     StringSchemaField,
     NumberSchemaField,
