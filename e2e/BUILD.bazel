@@ -39,3 +39,13 @@ py_test(
         requirement("psycopg2-binary"),
     ],
 )
+py_test(
+    name = "redis_test",
+    srcs = ["redis_test.py"],
+    python_version = "PY3",
+    deps = [
+        ":e2e",
+        "//entpy/storage/redis",
+        requirement("redis"),
+    ],
+)
