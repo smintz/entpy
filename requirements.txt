@@ -3,3 +3,4 @@ psycopg2-binary
 redis
 pymongo
 bson
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
